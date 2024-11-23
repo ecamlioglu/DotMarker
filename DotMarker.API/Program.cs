@@ -99,7 +99,7 @@ void ConfigureMiddleware(WebApplication app, IWebHostEnvironment env)
     }
 
     app.UseAuthorization();
-    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.MapGet("/", () => "Welcome to the CMS API!");
 

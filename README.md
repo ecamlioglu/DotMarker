@@ -132,6 +132,14 @@ DotMarker is a Content Management System (CMS) API for managing users and conten
   DELETE /api/contents/{contentId}/variants/removeAll
   ```
 
+## Separation of Concerns
+
+The project follows the principle of separation of concerns to ensure that each layer has a clear responsibility and does not mix concerns. For example, the `DotMarker.API/Controllers` (`DotMarker.API/Controllers/ContentController.cs`, `DotMarker.API/Controllers/UserController.cs`) only handle HTTP requests and responses, while the `DotMarker.Application/Services` (`DotMarker.Application/Services/ContentService.cs`, `DotMarker.Application/Services/UserService.cs`) contain the business logic. The exception handling logic has been moved from `DotMarker.API/Middlewares/ExceptionMiddleware.cs` to a separate middleware class `ExceptionHandlingMiddleware` to keep the controllers clean and focused on their primary responsibilities. The `DotMarker.Application/Interfaces` only contain interface definitions and not implementation details.
+
+## Dependency Injection and Configuration
+
+The project uses dependency injection to manage the dependencies between different layers. This is done in `DotMarker.API/Program.cs`, where all dependencies are registered and resolved through the DI container. The project also uses configuration files (`DotMarker.API/appsettings.json` and `DotMarker.API/appsettings.Development.json`) to manage application settings and environment-specific configurations. All configuration settings are centralized and easily manageable.
+
 ## Contributing
 
 We welcome contributions to improve this project. To contribute, please follow these steps:
