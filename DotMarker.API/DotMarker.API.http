@@ -1,0 +1,6 @@
+@DotMarker.API_HostAddress = http://localhost:5098
+
+GET {{DotMarker.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
