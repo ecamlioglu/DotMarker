@@ -6,10 +6,25 @@ public class User
     {
         Contents = new List<Content>();
     }
-    public int Id { get; set; }
-    public string FullName { get; set; }
-    public string Email { get; set; }
+    public int Id { get; private set; }
+    public string FullName { get; private set; }
+    public string Email { get; private set; }
     public virtual ICollection<Content> Contents { get; set; }
+    public void UpdateFullName(string fullName)
+    {
+        FullName = fullName;
+    }
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+    }
+
+    public void CreateUser(string fullName, string email)
+    {
+        FullName = fullName;
+        Email = email;
+    }
 
     public void AddContent(Content content)
     {

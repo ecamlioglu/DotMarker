@@ -4,8 +4,8 @@ using DotMarker.Application.Mapping;
 using DotMarker.Application.Services;
 using DotMarker.Infrastructure.Caching;
 using DotMarker.Infrastructure.Data;
+using DotMarker.Repositories.DI;
 using DotMarker.Repositories.Interfaces;
-using DotMarker.Repositories.Operations;
 using DotMarker.Repositories.UOW;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +29,7 @@ var app = builder.Build();
 ConfigureMiddleware(app, app.Environment);
 
 app.Run();
+return;
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
@@ -37,15 +38,19 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         options.UseInMemoryDatabase("CMSDatabase"));
 
     // Register IMemoryCache
-    services.AddMemoryCache();
+    services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = configuration.GetConnectionString("Redis");
+        options.InstanceName = "DotMarker_";
+    });
 
     // Register Mapster IMapper
     DotMarkerMapper.RegisterMappings();
     services.AddScoped<IMapper, Mapper>();
 
+    services.AddRepositories();
+
     // Dependency Injection
-    services.AddScoped<IUserRepository, UserRepository>();
-    services.AddScoped<IContentRepository, ContentRepository>();
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IContentService, ContentService>();
     services.AddScoped<ICacheManager, CacheManager>();
@@ -98,6 +103,7 @@ void ConfigureMiddleware(WebApplication app, IWebHostEnvironment env)
         });
     }
 
+    app.UseMiddleware<LoggingMiddleware>();
     app.UseAuthorization();
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 

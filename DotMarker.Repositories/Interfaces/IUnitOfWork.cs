@@ -2,7 +2,6 @@
 
 public interface IUnitOfWork
 {
-    IUserRepository UserRepository { get; }
-    IContentRepository ContentRepository { get; }
+    IRepository<T> GetRepository<T>() where T : class;
     Task SaveAsync();
 }
